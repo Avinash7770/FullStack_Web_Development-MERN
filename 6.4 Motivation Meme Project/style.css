@@ -1,0 +1,21 @@
+html{
+    background-color: black;
+}
+#p1{
+   border: 6px solid white;
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 20%;
+}
+h1{
+    color: white;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+font-family: 'Libre Baskerville', serif;
+}
+p{
+    color: white;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+font-family: 'Libre Baskerville', serif;
+}
