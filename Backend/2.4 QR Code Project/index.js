@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import qr from 'qr-image';
 import fs from 'fs';
+import { error } from 'console';
 
 //var qr = require('qr-image');
 inquirer
@@ -12,6 +13,10 @@ inquirer
     const url = answers.URL;
     var qr_svg = qr.image(url);
     qr_svg.pipe(fs.createWriteStream('qr_image.png'));
+    fs.writeFile("URL.txt",url,(err) => {
+        if (err) throw err;
+        
+      });
   })
   .catch((error) => {
     if (error.isTtyError) {
