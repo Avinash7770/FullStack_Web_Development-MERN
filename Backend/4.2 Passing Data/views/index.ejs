@@ -9,6 +9,13 @@
 
 <body>
   <!-- Write your code here -->
+  <% if(locals.numofletter){%>
+    <h1>Length of Your name is <%= numofletter%> </h1>
+ <% } else {%> 
+
+    <h1>Enter Your Name</h1>
+  <% }%>
+  
   <form action="/submit" method="POST">
     <input type="text" name="fName" placeholder="First name">
     <input type="text" name="lName" placeholder="Last name">
