@@ -39,7 +39,7 @@ form {
 }
 
 .feedback-input {
-  color: white;
+  color: rgb(0, 0, 0);
   font-weight: 500;
   font-size: 18px;
   border-radius: 5px;
