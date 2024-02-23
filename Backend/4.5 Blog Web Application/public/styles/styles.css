@@ -1,0 +1,107 @@
+:root {
+    /*Colors*/
+    --orange: #E6621F;
+    --light-grey: #EDEDEE;
+    --grey: #898989;
+    --black-grey: #333333;
+    --white: #ffffff;
+
+    /*Font Families*/
+    --family-main: "Dosis", sans-serif;
+}
+
+body{
+    background-color: var(--black-grey);
+    font-family: var(--family-main);
+    color: var(--white);
+}
+/* Titles*/
+.title{
+    text-align: center;
+    font-weight: 600;
+    font-size: 4rem;
+    margin: 1rem;
+}
+.subtitle{
+    text-align: center;
+    font-size: 3.5rem;
+    margin: 1rem;
+}
+
+/* Navbar */
+.nav{
+    display: flex;
+    background-color: var(--orange);
+    padding: 10px;
+    gap: 10px;
+    justify-content: space-evenly;
+}
+
+.nav-btn{
+    text-decoration: none;
+    color: var(--light-grey);
+    font-size: 1.5rem;
+}
+.nav-btn:hover{
+    background-color: var(--grey);
+}
+.nav-btn:active{
+    background-color: var(--black-grey);
+}
+
+/* Form */
+.form-container{
+    width: 70%;
+    margin: auto;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.input{
+    width: 90%;
+    display: inline-block;
+    padding: .5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+.submit{
+    border-radius: 8%;
+    padding: .5rem;
+    border: none;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.submit-create{
+    background-color: rgb(7, 175, 7);
+}
+.submit-edit{
+    background-color: orange;
+    margin: 0 1rem;
+}
+.submit-delete{
+    background-color: rgb(229, 49, 49)
+}
+
+/* Posts */
+.posts{
+    text-align: center;
+}
+.post{
+    margin-bottom: 3.5rem;
+}
+.post-title{
+    font-size: 3rem ;
+    margin: 1rem;
+}
+.post-content{
+    font-size: 2rem;
+    margin: .5rem;
+}
+
+/* Footer */
+.footer{
+    text-align: center;
+    background-color: black;
+    padding: 2rem;
+    font-size: 1.5rem;
+}

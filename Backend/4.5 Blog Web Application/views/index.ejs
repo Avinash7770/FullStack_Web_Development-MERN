@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles\main.css"> 
-</head>
-<body>
+<%- include("partials/header.ejs") %>
+<h1 class="title">White Snow Blog</h1>
+
+<section id="create-post">
+    <h2 class="subtitle">Create Post</h2>
+    <div class="form-container">
+        <form action="/submit" method="post">
+
+            <input id="idTitle" name="idTitle" type="text" placeholder="Type title here" required class="input"><br>
     
-         <h1>Create Your Blog Post</h1>
-    <button id="Creation">Create Post</button>
-   
-   
-</body>
-</html>
+            <textarea name="idContent" id="idContent" cols="30" rows="10" placeholder="What's on your mind?" class="input"></textarea><br>
+    
+            <input name="idAuthor" id="idAuthor" type="text" placeholder="Author name" class="input"><br>
+    
+            <input name="idOption" type="submit" value="Create Post" class="submit submit-create">
+            <input name="idOption" type="submit" value="Edit Post" class="submit submit-edit">
+            <input name="idOption" type="submit" value="Delete Post" class="submit submit-delete">
+        </form>
+    </div>
+</section>
+
+<section id="posts">
+    <div class="posts">
+        <% if(locals.posts.length > 0){ %>
+
+            <h2 class="subtitle">Posts of White Snow's</h2>
+    
+            <% for(let i = 0; i < posts.length; i++){ %>
+                <div class="post">
+                    <h3 class="post-title"> <%= posts[i].title; %> </h3>
+                    <p class="post-content"> <%= posts[i].content; %> </p>
+                    <p class="post-content"> Author: <%= posts[i].author; %> </p>
+                </div>
+            <% } %>
+
+        <% } %>  
+    </div>
+     
+</section>
+
+
+
+<%- include("partials/footer.ejs") %>
