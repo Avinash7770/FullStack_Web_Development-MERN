@@ -11,13 +11,22 @@ const db = new pg.Client({
   password:"Avi7770@",
   port:5432,
 });
+db.connect();
 
 let quiz = [
   { country: "France", capital: "Paris" },
   { country: "United Kingdom", capital: "London" },
   { country: "United States of America", capital: "New York" },
 ];
-
+db.query("SELECT * FROM capitals",(err,res)=>{
+  if(err){
+    console.error("Unable to connect",err.stack);
+  }
+  else{
+   quiz=res.rows;
+  }
+  db.end();
+});
 let totalCorrect = 0;
 
 // Middleware
@@ -49,13 +58,16 @@ app.post("/submit", (req, res) => {
     question: currentQuestion,
     wasCorrect: isCorrect,
     totalScore: totalCorrect,
+
   });
+
 });
 
 async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
 
   currentQuestion = randomCountry;
+
 }
 
 app.listen(port, () => {
