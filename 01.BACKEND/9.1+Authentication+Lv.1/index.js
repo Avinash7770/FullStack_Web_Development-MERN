@@ -1,5 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
+import pg from "pg";
+const db = new pg.Client({
+  user:"postgres",
+  host:"localhost",
+  database:"Permalist",
+  password:"Avi7770@",
+  port:5432,
+})
+db.connect();
 
 const app = express();
 const port = 3000;
@@ -19,9 +28,19 @@ app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
-app.post("/register", async (req, res) => {});
+app.post("/register", async (req, res) => {
+  const email = req.body.username;
+  const password = req.body.password;
+  
 
-app.post("/login", async (req, res) => {});
+
+});
+
+app.post("/login", async (req, res) => {
+  const email = req.body.username;
+  const password = req.body.password;
+
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
