@@ -2,38 +2,35 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import bcrypt from "bcrypt";
-import session from "express-session";
 import passport from "passport";
-import {Strategy} from "passport";
-
-
+import { Strategy } from "passport-local";
+import session from "express-session";
+import env from "dotenv";
 
 const app = express();
 const port = 3000;
 const saltRounds = 10;
+env.config();
 
-
-//Setting up Session Middleware 
-app.use(session({
-  secret:"TOPSECRETWORD",
-  resave:false,
-  saveUninitialized:true,
-  cookie:{
-    maxAge:1000*60*60*24,
-  },
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "secrets",
-  password: "Avi7770@",
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_USER,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
 db.connect();
 
@@ -49,21 +46,31 @@ app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
-app.get("/secrets",(req,res)=>{
-  if(req.isAuthenticated()){
+app.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.get("/secrets", (req, res) => {
+  // console.log(req.user);
+  if (req.isAuthenticated()) {
     res.render("secrets.ejs");
-  }
-  else{
+  } else {
     res.redirect("/login");
   }
 });
 
-app.post("/login", passport.authenticate("local",{
-successRedirect :"/secrets",
-failureRedirect :"/login"
-}
-));
-
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/secrets",
+    failureRedirect: "/login",
+  })
+);
 
 app.post("/register", async (req, res) => {
   const email = req.body.username;
@@ -77,21 +84,19 @@ app.post("/register", async (req, res) => {
     if (checkResult.rows.length > 0) {
       req.redirect("/login");
     } else {
-      //hashing the password and saving it in the database
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
           console.error("Error hashing password:", err);
         } else {
-          //console.log("Hashed Password:", hash);
-          const result =await db.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2)",
+          const result = await db.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
             [email, hash]
           );
           const user = result.rows[0];
-          req.login(user,(err)=>{
-            //console.log(err);
+          req.login(user, (err) => {
+            console.log("success");
             res.redirect("/secrets");
-          })
+          });
         }
       });
     }
@@ -100,14 +105,10 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
-
 passport.use(
-  "local",
-  new Strategy ( async function verify(username,password,cb){
-    //console.log(username);
+  new Strategy(async function verify(username, password, cb) {
     try {
-      const result = await db.query("SELECT * FROM users WHERE email = $1", [
+      const result = await db.query("SELECT * FROM users WHERE email = $1 ", [
         username,
       ]);
       if (result.rows.length > 0) {
@@ -115,23 +116,25 @@ passport.use(
         const storedHashedPassword = user.password;
         bcrypt.compare(password, storedHashedPassword, (err, valid) => {
           if (err) {
+            //Error with password check
+            console.error("Error comparing passwords:", err);
             return cb(err);
           } else {
             if (valid) {
-              return cb(null,user);
+              //Passed password check
+              return cb(null, user);
             } else {
-              return cb(null,false)
+              //Did not pass password check
+              return cb(null, false);
             }
           }
         });
       } else {
-        return cb("User Not Found");
+        return cb("User not found");
       }
     } catch (err) {
-      //return cb(err);
       console.log(err);
     }
-
   })
 );
 
